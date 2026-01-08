@@ -13,6 +13,7 @@ func TestEmpty(t *testing.T) {
 }
 
 func TestOpenConnection(t *testing.T) {
+	// Using docker
 	// Format: username:password@tcp(host:port)/database_name
     dsn := "root:password1234@tcp(127.0.0.1:3306)/db_belajar"
 	db, err := sql.Open("mysql", dsn)
@@ -29,5 +30,5 @@ func TestOpenConnection(t *testing.T) {
 	}
 
 	fmt.Println("Successfully open connection database")
-	
+
 }
