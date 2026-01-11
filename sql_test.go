@@ -21,7 +21,7 @@ func TestExecSql(t *testing.T) {
 	ctx := context.Background()
 
 	// example insert data sql
-	script := "INSERT INTO customer(id, name) VALUES('joko', 'Joko');"
+	script := "INSERT INTO customer(id, name) VALUES('mamat', 'Mamat');"
 
 	// ExecContext can be used to send sql command that dont return rows (like insert, update, delete)
 	_, err  := db.ExecContext(ctx, script)
@@ -32,4 +32,34 @@ func TestExecSql(t *testing.T) {
 
 	fmt.Println("Success insert data customer")
 	
+}
+
+func TestSelectSql(t *testing.T) {
+
+	db := GetConnectionDB()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	script := "SELECT id, name FROM customer;"
+	rows, err := db.QueryContext(ctx, script)
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+
+		var id, name string
+		err := rows.Scan(&id, &name)
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("id:", id)
+		fmt.Println("name:", name)
+		
+	}
 }
