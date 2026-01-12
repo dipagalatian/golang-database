@@ -113,3 +113,50 @@ func TestQuerySqlComplex(t *testing.T) {
 	}
 	
 }
+
+func TestSqlInjection(t *testing.T) {
+
+	db := GetConnectionDB()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	// simulate user input for login
+	// username := "admin"
+	// password := "admin" 
+
+	// simulate sql injection attack
+	// explanation: by inputting this value for username
+	// the sql script will be manipulated to always return true
+	// because the part after # will be ignored by mysql (# is comment in mysql)
+	// so the script will be like this:
+	// SELECT username FROM user WHERE username = 'admin' # ' AND password = 'asdf' LIMIT 1;
+	// which is equivalent to:
+	// SELECT username FROM user WHERE username = 'admin';
+	// thus the attacker can login without knowing the correct password
+	username := "admin'; #"
+	password := "asdf"
+
+	script := "SELECT username FROM user WHERE username = '" + username + "' AND password = '" + password + "' LIMIT 1;"
+	fmt.Println("script login:", script)
+	
+	rows, err  := db.QueryContext(ctx, script)
+	if err != nil {
+		panic(err)
+	}
+
+	defer rows.Close()
+
+	if rows.Next() {
+		var username string
+		err := rows.Scan(&username)
+		if err != nil {
+			panic(err)
+		}
+		
+		fmt.Println("Login success:", username)
+	} else {
+		fmt.Println("Login Failed")
+	}
+	
+}
