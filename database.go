@@ -6,7 +6,7 @@ import (
 )
 
 func GetConnectionDB() *sql.DB {
-	dsn := "root:password1234@tcp(127.0.0.1:3306)/db_belajar"
+	dsn := "root:password1234@tcp(127.0.0.1:3306)/db_belajar?parseTime=true"
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
