@@ -28,3 +28,18 @@ func TestCommentInsert(t *testing.T) {
 	fmt.Println("Result TestCommentInsert:", result)
 	
 }  
+
+func TestCommentFindById(t *testing.T)  {
+
+	commentRepository := NewCommentRepositoy(golang_database.GetConnectionDB())
+
+	ctx := context.Background()
+	id := int32(34)
+	
+ 	result, err := commentRepository.FindById(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Result TestCommentFindById:", result)
+}
