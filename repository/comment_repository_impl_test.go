@@ -43,3 +43,21 @@ func TestCommentFindById(t *testing.T)  {
 
 	fmt.Println("Result TestCommentFindById:", result)
 }
+
+func TestCommentsFindAll(t *testing.T) {
+
+	commentRepository := NewCommentRepositoy(golang_database.GetConnectionDB())
+
+	ctx := context.Background()
+
+	results, err := commentRepository.FindAll(ctx)
+
+	if err != nil {
+		panic(err)
+	}
+
+	for _, comment := range results {
+		fmt.Println("Comment: ", comment)
+	}
+	
+}
